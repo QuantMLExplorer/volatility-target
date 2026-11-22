@@ -8,7 +8,7 @@ CASH_AWARE_TYPES = {"total_return", "excess_return"}
 
 @dataclass(frozen=True)
 class IndexParams:
-    name: str
+    name: str                  # nom du sous-jacent 
     index_type: str            # price_return | total_return | excess_return
     vol_target: float          # alpha_T
     lam_S: float               # facteur de décroissance court terme
@@ -17,7 +17,7 @@ class IndexParams:
     T: int                     # fenêtre du maximum des volatilités (jours)
     LM: float                  # exposition maximale (levier max)
     d: int                     # décalage (jours)
-    cash_rate: Optional[str] = None   # ex. "SONIA", "FedFunds" ; None = pas de cash (rC = 0)
+    cash_rate: Optional[str] = None   # ex. "SONIA", "FedFunds" 
     day_count: Optional[int] = None   # 360 ou 365
 
     def __post_init__(self):
@@ -37,6 +37,7 @@ class IndexParams:
 
     @property
     def uses_cash(self) -> bool:
+        """Renvoie 'True' si le type d'indice  nécessite un taux cash."""
         return self.index_type in CASH_AWARE_TYPES
 
 
