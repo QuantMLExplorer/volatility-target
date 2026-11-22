@@ -117,7 +117,7 @@ VolatilityEstimator  │      ReturnsCalculator
 | `cash_rate` | Taux de cash (ex. `SONIA`, `FedFunds`), requis pour `total_return` et `excess_return` |
 | `day_count` | Convention de jours : `360` ou `365`, requis avec `cash_rate` |
 
-Exemple de configuration (valeurs de l'Appendix C des Ground Rules, FTSE Divest-Invest Developed 200 USD) :
+Exemple de fichier JSON de configuration que ConfigLoader lit :
 
 ```json
 {
