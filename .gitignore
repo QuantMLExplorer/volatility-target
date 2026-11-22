@@ -1,0 +1,12 @@
+# à ne pas envoyer
+params/
+src/tests/
+src/Data/
+
+
+# fichiers générés
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
