@@ -136,3 +136,43 @@ Exemple de fichier JSON de configuration que ConfigLoader lit :
 }
 ```
 
+## Installation et tests (Linux)
+
+Depuis la racine du projet (le dossier qui contient `src/` et `tests/`).
+
+**1. Créer l'environnement virtuel** (à faire une seule fois)
+
+```
+python3 -m venv .venv      
+```
+
+**2. L'activer**  (à réactiver chaque ouverture d'un nouveau terminal)
+
+source .venv/bin/activate
+
+`(.venv)` apparaît au début de la ligne du terminal quand l'environnement est actif.
+
+**3. Installer les dépendances** (à faire une seule fois)
+
+```
+python -m pip install -r requirements.txt
+```
+
+```
+python -m pip install pytest
+```
+
+**4. Lancer les tests**
+
+```
+python -m pytest tests -v
+```
+
+Pour lancer une partie des tests :
+
+| Commande | Ce qu'elle lance |
+|---|---|
+| `python -m pytest tests/units/IndexParams -v` | seulement ce dossier |
+| `python -m pytest tests/units/IndexParams/test_index_unknown_type.py -v` | seulement ce fichier |
+
+

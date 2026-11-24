@@ -27,6 +27,8 @@ class IndexParams:
             raise ValueError(f"{self.name}: il faut 0 < lam_S < lam_L <= 1")
         if self.vol_target <= 0 or self.LM <= 0:
             raise ValueError(f"{self.name}: vol_target et LM doivent être > 0")
+        if not isinstance(self.K, int) or not isinstance(self.T, int) or not isinstance(self.d, int):
+            raise TypeError(f"{self.name}: K, T et d doivent être des entiers")
         if self.K < 1 or self.T < 1 or self.d < 0:
             raise ValueError(f"{self.name}: K, T >= 1 et d >= 0")
         if self.index_type in CASH_AWARE_TYPES:
