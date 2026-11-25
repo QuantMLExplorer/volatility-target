@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.Exposure.VolatilityEstimator import VolatilityEstimator
+from src.VolatilityEstimator.EwmaMaxVolatilityEstimator import EwmaMaxVolatilityEstimator
 
 
 """Ce test s'assure que σMAX réagit immédiatement à un pic de volatilité,
@@ -22,10 +22,10 @@ def test_sigma_max_reacts_immediately_then_decays_after_t_days(params):
             valeurs = np.full(len(log_returns), 0.12)
         return pd.Series(valeurs, index=log_returns.index, name=name)
 
-    est = VolatilityEstimator(params)
+    est = EwmaMaxVolatilityEstimator(params)
     est._ewma_vol = fake_ewma_vol
 
-    sigma_max = est.sigma_max(returns)
+    sigma_max = est.compute(returns)
 
     assert sigma_max.iloc[k0 - 1] == 0.12          # avant le choc : max(σS, σL) = σL
     assert (sigma_max.iloc[k0:k0 + T] == 0.5).all()  # réaction immédiate, maintenue T jours

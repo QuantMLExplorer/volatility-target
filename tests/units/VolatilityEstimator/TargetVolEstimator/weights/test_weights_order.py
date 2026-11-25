@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.Exposure.VolatilityEstimator import VolatilityEstimator
+from src.VolatilityEstimator.EwmaMaxVolatilityEstimator import EwmaMaxVolatilityEstimator
 
 """Ce test lance le même test plusieurs fois avec une paire (lam, K) différente à chaque fois.
 
@@ -18,6 +18,6 @@ et que les poids décroissent en remontant vers le passé.
     ],
 )
 def test_weights_most_recent_is_largest(lam, K):
-    weights = VolatilityEstimator.weights(lam, K)
+    weights = EwmaMaxVolatilityEstimator.weights(lam, K)
     assert weights.argmax() == K - 1        # le plus grand poids est le dernier
     assert np.all(np.diff(weights) > 0)     # strictement croissants, du plus ancien au plus récent

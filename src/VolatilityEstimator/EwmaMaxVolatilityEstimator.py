@@ -2,20 +2,18 @@ import numpy as np
 import pandas as pd
 from numpy.lib.stride_tricks import sliding_window_view
 from src.Config.IndexParams import IndexParams
+from src.VolatilityEstimator.BaseVolatilityEstimator import BaseVolatilityEstimator
 
 TRADING_DAYS = 252
 
 
-class VolatilityEstimator:
+class EwmaMaxVolatilityEstimator(BaseVolatilityEstimator):
     """Calcule les séries de volatilité à partir de la série des rendements logarithmiques.
 
     σ(t) = sqrt(252 × Σ_{k=t-K+1..t} α(t-k+1) × r(k)² / Σ_{k=1..K} α(k)),  r(k) = ln(S(k)/S(k-1))
     α(k) = (1-λ) × λ^(k-1),  avec λ = λS pour σS et λ = λL pour σL (λS < λL ≤ 1)
     σMAX(t) = max_{i=0..T-1} max(σS(t-i), σL(t-i))
     """
-
-    def __init__(self, params: IndexParams):
-        self.params = params
 
     @staticmethod
     def weights(lam: float, K: int) -> np.ndarray:
@@ -37,7 +35,7 @@ class VolatilityEstimator:
         return pd.Series(out, index=log_returns.index, name=name)
 
 
-    def sigma_max(self, log_returns: pd.Series) -> pd.Series:
+    def compute(self, log_returns: pd.Series) -> pd.Series:
         """Renvoie la série σMAX : max glissant sur T jours de max(σS, σL), NaN tant que σS ou σL n'est pas défini """
         p = self.params
         both = pd.concat(

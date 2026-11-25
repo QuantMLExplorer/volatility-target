@@ -1,6 +1,6 @@
 import pytest
 
-from src.Exposure.VolatilityEstimator import VolatilityEstimator
+from src.VolatilityEstimator.EwmaMaxVolatilityEstimator import EwmaMaxVolatilityEstimator
 
 """Ce test lance le même test plusieurs fois avec une paire (lam, K) différente à chaque fois.
 
@@ -17,5 +17,5 @@ Il s'assure que la somme des poids renvoyés par weights vaut 1.
     ],
 )
 def test_weights_sum_equals_one(lam, K):
-    weights = VolatilityEstimator.weights(lam, K)
+    weights = EwmaMaxVolatilityEstimator.weights(lam, K)
     assert weights.sum() == pytest.approx(1)

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.Exposure.ExposureModel import ExposureModel
+from src.Exposure.TargetVolExposure import TargetVolExposure
 
 """Ce test s'assure que le décalage d est respecté : modifier un rendement au jour k0
 ne change pas E avant k0 + d, mais change E(k0 + d).
@@ -18,7 +18,7 @@ def test_exposure_lag_d_is_respected(params):
     choc = base.copy()
     choc.iloc[k0] = 0.2                                         # rendement extrême : σMAX bondit dès k0
 
-    model = ExposureModel(params)
+    model = TargetVolExposure(params) 
     E_base = model.compute(base)
     E_choc = model.compute(choc)
 

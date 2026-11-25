@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.Exposure.VolatilityEstimator import VolatilityEstimator
+from src.VolatilityEstimator.EwmaMaxVolatilityEstimator import EwmaMaxVolatilityEstimator
 
 """Ce test s'assure que σMAX est NaN dès que σS ou σL est NaN (skipna=False)."""
 
@@ -19,10 +19,10 @@ def test_sigma_max_is_nan_when_one_volatility_is_nan(params):
             valeurs = np.full(len(log_returns), 0.1)
         return pd.Series(valeurs, index=log_returns.index, name=name)
 
-    est = VolatilityEstimator(params)
+    est = EwmaMaxVolatilityEstimator(params)
     est._ewma_vol = fake_ewma_vol                  # remplace le calcul par des séries connues
 
-    sigma_max = est.sigma_max(returns)
+    sigma_max = est.compute(returns)
 
     assert sigma_max.iloc[k0:k0 + T].isna().all()  # toute fenêtre de T jours contenant k0 est NaN
     assert sigma_max.iloc[k0 - 1] == 0.2           # avant : max(0.2, 0.1)

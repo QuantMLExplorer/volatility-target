@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.Exposure.ExposureModel import ExposureModel
+from src.Exposure.TargetVolExposure import TargetVolExposure
 
 """Ce test s'assure que, avec des rendements de volatilité connue, E(t) est constante
 et vaut la valeur théorique min(LM, vol_target / (c × √252)).
@@ -13,7 +13,7 @@ def test_exposure_constant_returns_matches_theoretical_value(params):
     idx = pd.bdate_range("2022-01-03", periods=n)
     returns = pd.Series(c * np.where(np.arange(n) % 2 == 0, 1, -1), index=idx)
 
-    E = ExposureModel(params).compute(returns)
+    E = TargetVolExposure(params).compute(returns)
 
     sigma = c * np.sqrt(252)                                   # σS = σL = σMAX, car r² = c² à chaque jour  # ≈ 0,3175 
     attendu = min(params.LM, params.vol_target / sigma)     

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.Exposure.ExposureModel import ExposureModel
+from src.Exposure.TargetVolExposure import TargetVolExposure
 
 """Ce test s'assure que : 
 
@@ -20,7 +20,7 @@ def test_exposure_is_capped_by_lm(params):
     valeurs = np.concatenate([rng.normal(0, 0.002, n // 2), rng.normal(0, 0.02, n - n // 2)])
     returns = pd.Series(valeurs, index=idx)
 
-    E = ExposureModel(params).compute(returns)
+    E = TargetVolExposure(params).compute(returns)
 
     premiere_valeur = params.K - 1 + params.T - 1 + params.d     # fenêtres K et T, puis décalage d
     marge = 30                                                   # jours laissés à la volatilité pour monter
