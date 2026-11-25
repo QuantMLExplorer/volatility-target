@@ -75,19 +75,35 @@ rC(t) = r(t-1) × d(t, t-1) / DayCount
 
 ## Architecture
 
+Flux de calcul :
+
 ```
-ConfigLoader ──► IndexParams ──► IndexFactory ──► indice
-                     │
-        ┌────────────┼──────────────┐
-VolatilityEstimator  │      ReturnsCalculator
-        └─► ExposureModel           │
-                     ▼              ▼
-              BaseVolTargetIndex  (E(t), rU(t))
-              ├── PriceReturnIndex
-              └── CashAwareIndex  (+ rC(t))
-                  ├── TotalReturnIndex
-                  └── ExcessReturnIndex
+prix ──► ReturnsCalculator ──► rendements ──► ExposureModel ──► E(t) ──► Index ──► valeur de l'indice
 ```
+
+Chaque étape repose sur une classe mère abstraite et des classes filles, ce qui permet d'ajouter une méthode sans toucher au reste :
+
+```
+BaseVolatilityEstimator              estimation de la volatilité σ(t)
+└── EwmaMaxVolatilityEstimator       σMAX des Ground Rules (EWMA court/long + max glissant)
+
+BaseExposureModel                    calcul de l'exposition E(t)
+└── TargetVolExposure                E(t) = min(LM, vol_target / σMAX(t-d))
+
+BaseVolTargetIndex                   calcul de la valeur de l'indice
+├── PriceReturnIndex
+└── CashAwareIndex                   indices utilisant le rendement du cash rC(t)
+    ├── TotalReturnIndex
+    └── ExcessReturnIndex
+```
+
+`ConfigLoader` lit le JSON et fournit un `IndexParams`, et `IndexFactory` construit l'indice du bon type.
+
+Trois points d'extension reposent sur le même principe : une classe mère abstraite qui définit l'interface, et une classe fille par méthode de calcul.
+
+- **Estimation de la volatilité** : `BaseVolatilityEstimator` (méthode `compute`). Pour une autre méthode d'estimation, on ajoute une classe fille.
+- **Calcul de l'exposition** : `BaseExposureModel` (méthode `compute`), qui reçoit un estimateur de volatilité. Pour une autre règle d'exposition, on ajoute une classe fille.
+- **Calcul de l'indice** : `BaseVolTargetIndex` (méthode `daily_factor`). Pour un nouveau type d'indice, on ajoute une classe fille qui définit le facteur journalier.
 
 | Classe | Rôle |
 |---|---|
